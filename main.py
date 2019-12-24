@@ -10,12 +10,12 @@ import os
 pytesseract.pytesseract.tesseract_cmd = r'C:\Users\Alex\AppData\Local\Tesseract-OCR\tesseract'
 
 imageFileEnding = "jpg"
-dirnameIn = ''
+dirnameIn = 'INPUT'
 dirnameOut = 'OUTPUT'
 
 pathlib.Path(dirnameOut).mkdir(parents=True, exist_ok=True)
 
-filePaths = dirnameIn + "*." + imageFileEnding
+filePaths = "*." + imageFileEnding
 
 if dirnameIn:
     filePaths = dirnameIn + "/" + filePaths
@@ -28,10 +28,10 @@ images = []
 
 for file in glob.glob(filePaths):
     images.append(cv2.imread(file, cv2.IMREAD_COLOR))
-    fileNames.append(file)
+    fileNames.append(file[len(dirnameIn)+1:])
 
 print("how many images: " + str(len(images)))
-print(fileNames)
+print("All the images: " + str(fileNames))
 
 
 def unsharp_mask(image2, kernel_size=(5, 5), sigma=1.0, amount=1.0, threshold=0):
@@ -60,7 +60,7 @@ for image in images:
 
     image = imutils.rotate_bound(image, info)
 
-    imageName = "result" + fileNames.pop(0)
+    imageName = "RESULT_" + fileNames.pop(0)
     cv2.imwrite(os.path.join(dirnameOut, imageName), image)
 
    # cv2.imshow("Rotated (Correct)", image)
